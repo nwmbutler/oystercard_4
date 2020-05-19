@@ -1,7 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
-
+let(:subject) { Oystercard.new }
+let(:card) { Oystercard.new(20) }
   it "has a balance" do
   expect(subject.balance).to eq(0)
   end
@@ -18,19 +19,18 @@ describe Oystercard do
     expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
   end
 
-  it { is_expected.to respond_to :touch_in }
-
-  it { is_expected.to respond_to :touch_out }
-
   it 'should be in journey when touched in' do
-    subject.touch_in
-    expect(subject).to be_in_journey
+    card.touch_in
+    expect(card).to be_in_journey
   end
 
   it 'should then not be in journey' do
-    subject.touch_in
-    subject.touch_out
-      expect(subject).not_to be_in_journey
+    card.touch_in
+    card.touch_out
+      expect(card).not_to be_in_journey
   end
 
+  it 'raises error if balance too low' do
+    expect {subject.touch_in}.to raise_error("insufficient funds")
+  end
 end
