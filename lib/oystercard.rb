@@ -7,6 +7,7 @@ DEFAULT_BALANCE = 0
 
   def initialize(balance = DEFAULT_BALANCE)
     @balance = balance
+    @in_journey = false
   end
 
   def top_up(value)
@@ -16,6 +17,18 @@ DEFAULT_BALANCE = 0
 
   def deduct(value)
     @balance -= value
+  end
+
+  def touch_in
+    @in_journey = true
+  end
+
+  def touch_out
+    @in_journey = false
+  end
+
+  def in_journey?
+    @in_journey
   end
 
 end
