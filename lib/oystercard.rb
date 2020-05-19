@@ -20,7 +20,7 @@ MIN_BALANCE = 1
   end
 
   def touch_in
-    fail "insufficient funds" unless sufficient_funds
+    fail "insufficient funds" unless sufficient_funds?
 
     @in_journey = true
   end
