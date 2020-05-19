@@ -7,11 +7,15 @@ describe Oystercard do
   end
 
   it "tops up balance with" do
-  expect(subject.top_up(10)).to eq 10
+  expect { subject.top_up(10) }.to change { subject.balance }.by(10)
   end
 
   it "errors with over limit" do
-    expect { subject.top_up(91) }.to raise_error "reached max limit"
+    expect { subject.top_up(Oystercard::MAX_BALANCE + 1) }.to raise_error "reached max limit"
+  end
+
+  it "deducts a fare from card" do
+    expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
   end
 
 end
