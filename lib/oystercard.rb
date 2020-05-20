@@ -5,9 +5,12 @@ class Oystercard
   DEFAULT_BALANCE = 0
   MIN_BALANCE = 1
   MIN_FARE = 1
+  DEFAULT_JOURNEY = {}
+
 
   def initialize(balance = DEFAULT_BALANCE)
     @balance = balance
+    @journey = {}
 
   end
 
@@ -30,6 +33,7 @@ class Oystercard
   def touch_out(exit_station)
     deduct(MIN_FARE)
     @exit_station = exit_station
+    @journey[entry_station] = exit_station
     @entry_station = nil
     @in_journey = false
   end
@@ -40,6 +44,10 @@ class Oystercard
 
   def sufficient_funds?
     @balance > MIN_BALANCE
+  end
+
+  def journey
+    @journey
   end
 
 private

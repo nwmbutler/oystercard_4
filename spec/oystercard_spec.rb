@@ -3,8 +3,9 @@ require 'oystercard'
 describe Oystercard do
 let(:subject) { Oystercard.new }
 let(:card) { Oystercard.new(20) }
-let(:station) {double :station}
-let(:exit_station) {double :exit_station}
+let(:entry_station) {double :station}
+let(:exit_station) {double :station}
+let(:journey){ { entry_station: entry_station, exit_station: exit_station } }
 
   it "has a balance" do
     expect(subject.balance).to eq(0)
@@ -23,34 +24,49 @@ let(:exit_station) {double :exit_station}
   end
 
   it 'should be in journey when touched in' do
-    card.touch_in(station)
+    card.touch_in(entry_station)
     expect(card).to be_in_journey
   end
 
 
   it 'should then not be in journey' do
-    card.touch_in(station)
-    card.touch_out(station)
+    card.touch_in(entry_station)
+    card.touch_out(exit_station)
     expect(card).not_to be_in_journey
   end
 
   it "saves the entry station" do
-    card.touch_in(station)
-    expect(card.entry_station).to eq station
+    card.touch_in(entry_station)
+    expect(card.entry_station).to eq entry_station
   end
 
   it 'saves the exit station' do
-    card.touch_in(station)
+    card.touch_in(entry_station)
     card.touch_out(exit_station)
     expect(card.exit_station).to eq exit_station
   end
 
   it 'should deduct minimum fare' do
-    card.touch_in(station)
-    expect { card.touch_out(station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
+    card.touch_in(entry_station)
+    expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
   end
 
   it 'raises error if balance too low' do
-    expect {subject.touch_in(station)}.to raise_error("insufficient funds")
+    expect {subject.touch_in(entry_station)}.to raise_error("insufficient funds")
   end
+
+
+  context '#journey' do
+
+    it 'journey has a default of empty' do
+      expect(subject.journey).to be_empty
+    end
+
+
+    it 'stores the entry and exit station' do
+      card.touch_in(entry_station)
+      card.touch_out(exit_station)
+      expect(subject.journey).to include journey
+    end
+end
 end
