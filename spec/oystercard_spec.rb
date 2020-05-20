@@ -62,11 +62,10 @@ let(:journey){ { entry_station: entry_station, exit_station: exit_station } }
       expect(subject.journey).to be_empty
     end
 
-
     it 'stores the entry and exit station' do
       card.touch_in(entry_station)
       card.touch_out(exit_station)
-      expect(subject.journey).to include journey
+      expect(card.journey).to eq(journey)
     end
 end
 end
