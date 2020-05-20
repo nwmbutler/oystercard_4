@@ -4,6 +4,7 @@ describe Oystercard do
 let(:subject) { Oystercard.new }
 let(:card) { Oystercard.new(20) }
 let(:station) {double :station}
+let(:exit_station) {double :exit_station}
 
   it "has a balance" do
     expect(subject.balance).to eq(0)
@@ -26,9 +27,10 @@ let(:station) {double :station}
     expect(card).to be_in_journey
   end
 
+
   it 'should then not be in journey' do
     card.touch_in(station)
-    card.touch_out
+    card.touch_out(station)
     expect(card).not_to be_in_journey
   end
 
@@ -37,9 +39,15 @@ let(:station) {double :station}
     expect(card.entry_station).to eq station
   end
 
+  it 'saves the exit station' do
+    card.touch_in(station)
+    card.touch_out(exit_station)
+    expect(card.exit_station).to eq exit_station
+  end
+
   it 'should deduct minimum fare' do
     card.touch_in(station)
-    expect { card.touch_out }.to change { card.balance }.by(-Oystercard::MIN_FARE)
+    expect { card.touch_out(station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
   end
 
   it 'raises error if balance too low' do
