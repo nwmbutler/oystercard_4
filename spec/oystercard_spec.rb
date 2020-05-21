@@ -23,40 +23,38 @@ let(:journey) { [{ entry_station: entry_station, exit_station: exit_station }] }
     expect { subject.deduct(10) }.to change { subject.balance }.by(-10)
   end
 
+  context 'touches in' do
+    before do
+      card.touch_in(entry_station)
+    end
+
+
   it 'should be in journey when touched in' do
-    card.touch_in(entry_station)
     expect(card).to be_in_journey
   end
 
 
   it 'should then not be in journey' do
-    card.touch_in(entry_station)
     card.touch_out(exit_station)
     expect(card).not_to be_in_journey
   end
 
   it "saves the entry station" do
-    card.touch_in(entry_station)
     expect(card.entry_station).to eq entry_station
   end
 
-  it 'saves the exit station' do
-    card.touch_in(entry_station)
-    card.touch_out(exit_station)
-    expect(card.exit_station).to eq exit_station
-  end
+end
 
-  it 'should deduct minimum fare' do
-    card.touch_in(entry_station)
-    expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
-  end
+it 'should deduct minimum fare' do
+  expect { card.touch_out(exit_station) }.to change { card.balance }.by(-Oystercard::MIN_FARE)
+end
 
   it 'raises error if balance too low' do
     expect {subject.touch_in(entry_station)}.to raise_error("insufficient funds")
   end
 
 
-  context '#journey' do
+  describe '#journey' do
 
     it 'journey has a default of empty' do
       expect(subject.journey).to be_empty
@@ -67,5 +65,5 @@ let(:journey) { [{ entry_station: entry_station, exit_station: exit_station }] }
       card.touch_out(exit_station)
       expect(card.journey).to eq(journey)
     end
-end
+  end
 end
