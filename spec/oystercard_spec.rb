@@ -29,15 +29,15 @@ let(:journey) { [{ entry_station: entry_station, exit_station: exit_station }] }
     end
 
 
-  it 'should be in journey when touched in' do
-    expect(card).to be_in_journey
-  end
+  # it 'should be in journey when touched in' do
+  #   expect(card).to be_in_journey
+  # end
 
 
-  it 'should then not be in journey' do
-    card.touch_out(exit_station)
-    expect(card).not_to be_in_journey
-  end
+  # it 'should then not be in journey' do
+  #   card.touch_out(exit_station)
+  #   expect(card).not_to be_in_journey
+  # end
 
   it "saves the entry station" do
     expect(card.entry_station).to eq entry_station
