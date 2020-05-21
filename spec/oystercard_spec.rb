@@ -4,8 +4,8 @@ describe Oystercard do
 let(:subject) { Oystercard.new }
 let(:card) { Oystercard.new(20) }
 let(:entry_station) {double :station}
-let(:exit_station) {double :station}
-let(:journey){ { entry_station: entry_station, exit_station: exit_station } }
+let(:exit_station) {double :exit_station}
+let(:journey) { [{ entry_station: entry_station, exit_station: exit_station }] }
 
   it "has a balance" do
     expect(subject.balance).to eq(0)
